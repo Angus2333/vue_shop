@@ -1,0 +1,40 @@
+import { createVNode as _createVNode } from "vue";
+import { mergeProps as _mergeProps } from "vue";
+import { resolveDirective as _resolveDirective } from "vue";
+import _extends from "@babel/runtime/helpers/esm/extends";
+import { ref } from 'vue';
+import { pick, createNamespace } from '../utils';
+import { useExpose } from '../composables/use-expose';
+import TimePicker from './TimePicker';
+import DatePicker from './DatePicker';
+
+var _createNamespace = createNamespace('datetime-picker'),
+    createComponent = _createNamespace[0],
+    bem = _createNamespace[1];
+
+var timePickerProps = Object.keys(TimePicker.props);
+var datePickerProps = Object.keys(DatePicker.props);
+export default createComponent({
+  props: _extends({}, TimePicker.props, DatePicker.props),
+  setup: function setup(props, _ref) {
+    var attrs = _ref.attrs,
+        slots = _ref.slots;
+    var root = ref();
+    useExpose({
+      getPicker: function getPicker() {
+        var _root$value;
+
+        return (_root$value = root.value) == null ? void 0 : _root$value.getPicker();
+      }
+    });
+    return function () {
+      var isTimePicker = props.type === 'time';
+      var Component = isTimePicker ? TimePicker : DatePicker;
+      var inheritProps = pick(props, isTimePicker ? timePickerProps : datePickerProps);
+      return _createVNode(Component, _mergeProps({
+        "ref": root,
+        "class": bem()
+      }, _extends({}, inheritProps, attrs)), _extends({}, slots));
+    };
+  }
+});
